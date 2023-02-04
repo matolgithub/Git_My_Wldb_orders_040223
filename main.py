@@ -48,6 +48,19 @@ def read_data():
     return total_data_list
 
 
+def write_data():
+    list_data = read_data()
+    num = 1
+    not_for_war = [4, 7, 23, 58, 68, 69]
+    with open("data_result.xls", "w", encoding="utf-8") as new_file:
+        for item in list_data:
+            for key, value in item.items():
+                result_string = f"{num}:! {value[0]}! {value[1]}! {value[3]}\n{value[2]}"
+                if key not in not_for_war and key <= 70:
+                    new_file.write(f"{result_string}\n")
+                    num += 1
+
+
 def dialog_func():
     read_data()
 
@@ -58,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    write_data()
