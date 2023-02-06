@@ -11,6 +11,9 @@ load_dotenv()
 url = getenv("URL")
 headers = Headers().generate()
 
+id_catalog = ""
+id_picture = ""
+
 
 def scrape_func():
     response_text = get(url=url, headers=headers).text
@@ -34,14 +37,20 @@ def read_data():
         data_price_list = soup.findAll("p", "archive-item__price")
         data_goods_list = soup.findAll("p", "archive-item__brand")
         data_img_link_list = soup.findAll("img")
-    # print(len(data_goods_list), len(data_price_list), len(data_img_link_list))
+        data_id_picture = soup.findAll("li", "archive-page__item archive-item")
+    # print(len(data_goods_list), len(data_price_list), len(data_img_link_list), len(data_id_picture))
+    # pprint(data_id_picture)
     for good_number in range(len(data_goods_list)):
         sku = str(data_goods_list[good_number])[31:-4]
         price_str = str(data_price_list[good_number]).replace("\xa0", "").replace(" ", "")[63:-37]
         price_int = int(str(data_price_list[good_number]).replace("\xa0", "").replace(" ", "")[63:-38])
-        link = "https:" + str(data_img_link_list[good_number]).replace(" ", "").replace('"', "")[18:-11]
+        link_basket = "https:" + str(data_img_link_list[good_number]).replace(" ", "").replace('"', "")[18:-11]
+        id_catalog = link_basket.split("/")[5]
+        id_picture = str(data_id_picture[good_number]).replace(" ", "")[55:64].replace('"', '')
+        url_picture = f"https://www.wildberries.ru/catalog/{id_catalog}/detail.aspx?size={id_picture}"
+        link_pic = url_picture
         total_data_list.append(
-            {unit_number: [sku, price_str, price_int, link]})
+            {unit_number: [sku, price_str, price_int, link_basket, url_picture]})
         unit_number += 1
     pprint(total_data_list)
 
@@ -52,11 +61,12 @@ def write_data():
     list_data = read_data()
     num = 1
     not_for_war = [4, 7, 23, 58, 68, 69]
-    with open("data_result.xls", "w", encoding="utf-8") as new_file:
+    for_war = [96, 99, 100, 101, 102, 103]
+    with open("data_result.json", "w", encoding="utf-8") as new_file:
         for item in list_data:
             for key, value in item.items():
-                result_string = f"{num}:! {value[0]}! {value[1]}! {value[3]}\n{value[2]}"
-                if key not in not_for_war and key <= 70:
+                result_string = f"{num}:! {value[0]}! {value[1]}! {value[3]}! {value[4]}\n{value[2]}"
+                if key not in not_for_war and key <= 70 or key in for_war:
                     new_file.write(f"{result_string}\n")
                     num += 1
 
