@@ -37,8 +37,14 @@ def main_form():
     window.title("Python - user form.")
     text_1 = "Нажмите кнопку!"
     text_2 = "Игорь! Привет! Я Чэвэкашка! Олег попросил немного помочь тебе. Что будем делать?"
-    input_label_ID = Label(text=text_1, fg='white', bg='black')
-    input_label_ID.grid(row=1, column=1, padx=5, pady=10, sticky="w")
+    text_instruction_1 = Label(text=text_1, fg='white', bg='black')
+    text_instruction_1.grid(row=7, column=1, padx=5, pady=10, sticky="w")
+
+    canvas = Canvas(width=500, height=600, bg='black')
+    canvas.grid(row=1, column=1, padx=5, pady=5, sticky="nesw")
+    img = PhotoImage(file='pictures/2 (1).png')
+    canvas.create_image(10, 10, anchor=NW, image=img)
+
 
     def exit_form():
         window.quit()
@@ -95,15 +101,22 @@ def main_form():
                         new_file.write(f"{result_string}\n")
                         num += 1
 
+    def photo_forma():
+        pass
+
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='blue', fg='white', command=read_data)
     button_2 = Button(text="Записать список в файл", activebackground='red',
                       highlightcolor='red', bg='blue', fg='white', command=write_data)
-    button_3 = Button(text="Закрыть форму", activebackground='red', highlightcolor='red', bg='blue', fg='white',
+    button_3 = Button(text="Открыть форму с фото", activebackground='red',
+                      highlightcolor='red', bg='blue', fg='white', command=photo_forma)
+    button_4 = Button(text="Закрыть форму", activebackground='red', highlightcolor='red', bg='blue', fg='white',
                       command=exit_form)
     button_1.grid(row=3, column=1, padx=30, pady=20, sticky='nesw')
     button_2.grid(row=4, column=1, padx=30, pady=20, sticky='nesw')
     button_3.grid(row=5, column=1, padx=30, pady=20, sticky='nesw')
+    button_4.grid(row=6, column=1, padx=30, pady=20, sticky='nesw')
+
     speaker_text(text_2 + text_1)
 
     window.mainloop()
