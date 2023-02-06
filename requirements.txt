@@ -3,3 +3,5 @@ bs4==0.0.1
 fake_headers==1.0.2
 python-dotenv==0.21.1
 lxml==4.9.2
+pyttsx3==2.90
+gTTS==2.3.1
