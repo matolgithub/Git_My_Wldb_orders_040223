@@ -6,9 +6,11 @@ from pprint import pprint
 from dotenv import load_dotenv
 import lxml
 from tkinter import *
+# from tkinter.ttk import *
 from tkinter import messagebox
 from tkinter import simpledialog
 import pyttsx3
+import second_window
 
 load_dotenv()
 
@@ -44,7 +46,6 @@ def main_form():
     canvas.grid(row=1, column=1, padx=5, pady=5, sticky="nesw")
     img = PhotoImage(file='pictures/2 (1).png')
     canvas.create_image(10, 10, anchor=NW, image=img)
-
 
     def exit_form():
         window.quit()
@@ -102,7 +103,7 @@ def main_form():
                         num += 1
 
     def photo_forma():
-        pass
+        second_window()
 
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='blue', fg='white', command=read_data)
