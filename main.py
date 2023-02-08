@@ -10,7 +10,8 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 import pyttsx3
-import second_window
+
+# import second_window
 
 load_dotenv()
 
@@ -24,28 +25,32 @@ not_for_war = [4, 7, 23, 58, 68, 69]
 for_war = [96, 99, 100, 101, 102, 103]
 
 
-def speaker_text(text):
-    tts = pyttsx3.init()
-    voices = tts.getProperty('voices')
-    tts.setProperty('voice', 'ru')
-    tts.say(f'{text}')
-    tts.runAndWait()
-    return text
+# def speaker_text(text):
+#     tts = pyttsx3.init()
+#     voices = tts.getProperty('voices')
+#     tts.setProperty('voice', 'ru')
+#     tts.say(f'{text}')
+#     tts.runAndWait()
+#     return text
 
 
 def main_form():
     window = Tk()
-    window["bg"] = "black"
+    # window["bg"] = "black"
     window.title("Python - user form.")
     text_1 = "Нажмите кнопку!"
     text_2 = "Игорь! Привет! Я Чэвэкашка! Олег попросил немного помочь тебе. Что будем делать?"
     text_instruction_1 = Label(text=text_1, fg='white', bg='black')
     text_instruction_1.grid(row=7, column=1, padx=5, pady=10, sticky="w")
 
-    canvas = Canvas(width=500, height=600, bg='black')
-    canvas.grid(row=1, column=1, padx=5, pady=5, sticky="nesw")
+    background_image = PhotoImage(file="pictures/com.png")
+    background_label = Label(window, image=background_image)
+    background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+    canvas = Canvas(width=430, height=520)
+    canvas.grid(row=1, column=1, padx=15, pady=15, sticky="nesw")
     img = PhotoImage(file='pictures/2 (1).png')
-    canvas.create_image(10, 10, anchor=NW, image=img)
+    canvas.create_image(0, 0, anchor=NW, image=img)
 
     def exit_form():
         window.quit()
@@ -103,7 +108,7 @@ def main_form():
                         num += 1
 
     def photo_forma():
-        second_window()
+        pass
 
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='blue', fg='white', command=read_data)
@@ -118,7 +123,7 @@ def main_form():
     button_3.grid(row=5, column=1, padx=30, pady=20, sticky='nesw')
     button_4.grid(row=6, column=1, padx=30, pady=20, sticky='nesw')
 
-    speaker_text(text_2 + text_1)
+    # speaker_text(text_2 + text_1)
 
     window.mainloop()
 

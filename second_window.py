@@ -12,6 +12,10 @@ root.geometry("1900x850")
 url = "https://www.wildberries.ru/catalog/137790056/detail.aspx?size=234503434"
 url_pic = "https://basket-10.wb.ru/vol1377/part137790/137790056/images/c516x688/1.jpg"
 
+background_image = PhotoImage(file="pictures/com.png")
+background_label = Label(root, image=background_image)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
 
 def push_button():
     text_push_1 = 'Форма диалога.'
