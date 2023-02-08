@@ -1,3 +1,4 @@
+import os
 from os import getenv
 from requests import get
 from bs4 import BeautifulSoup as bs
@@ -12,6 +13,7 @@ from tkinter import simpledialog
 import pyttsx3
 import time
 import webbrowser
+from tkinter import filedialog as fd
 
 load_dotenv()
 
@@ -53,6 +55,9 @@ def main_form():
 
     def exit_form():
         window.quit()
+        text_exit_1 = 'Работа приложения'
+        text_exit_2 = 'Благодарим, работа закончена!'
+        messagebox.showinfo(text_exit_1, text_exit_2)
 
     def scrape_func():
         response_text = get(url=url, headers=headers).text
@@ -66,10 +71,10 @@ def main_form():
 
         return soup
 
-    def read_data():
+    def read_data_1(data_file="data.txt"):
         total_data_list = []
         unit_number = 1
-        with open("data.txt", "r") as file:
+        with open(data_file, "r") as file:
             content = file.read()
             soup = bs(content, "lxml")
             data_price_list = soup.findAll("p", "archive-item__price")
@@ -90,21 +95,32 @@ def main_form():
             total_data_list.append(
                 {unit_number: [sku, price_str, price_int, link_basket, url_picture]})
             unit_number += 1
-        pprint(total_data_list)
+        # pprint(total_data_list)
 
         return total_data_list
 
-    def write_data():
-        list_data = read_data()
-        num = 1
+    def get_list():
+        list_goods = read_data_1()
+        text_get_1 = 'Работа приложения'
+        text_get_2 = list_goods
+        messagebox.showinfo(text_get_1, text_get_2)
 
-        with open("data_result.json", "w", encoding="utf-8") as new_file:
+    def write_data(file_name="data_result.txt"):
+        list_data = read_data_1()
+        num = 1
+        file_path = os.getcwd()
+
+        with open(file_name, "w", encoding="utf-8") as new_file:
             for item in list_data:
                 for key, value in item.items():
                     result_string = f"{num}:! {value[0]}! {value[1]}! {value[3]}! {value[4]}\n{value[2]}"
                     if key not in not_for_war and key <= 70 or key in for_war:
                         new_file.write(f"{result_string}\n")
                         num += 1
+
+        text_write_1 = 'Работа приложения'
+        text_write_2 = f'Данные по снаряжению записаны в файл: {file_name}, который расположен в каталоге: {file_path}.'
+        messagebox.showinfo(text_write_1, text_write_2)
 
     def new_window():
         root = Toplevel(window)
@@ -173,12 +189,12 @@ def main_form():
         root.mainloop()
 
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
-                      bg='blue', fg='white', command=read_data)
+                      bg='blue', fg='white', command=get_list)
     button_2 = Button(text="Записать список в файл", activebackground='red',
                       highlightcolor='red', bg='blue', fg='white', command=write_data)
     button_3 = Button(text="Открыть форму с фото", activebackground='red',
                       highlightcolor='red', bg='blue', fg='white', command=new_window)
-    button_4 = Button(text="Закрыть форму", activebackground='red', highlightcolor='red', bg='blue', fg='white',
+    button_4 = Button(text="ВЫХОД", activebackground='red', highlightcolor='red', bg='blue', fg='white',
                       command=exit_form)
     button_1.grid(row=3, column=1, padx=30, pady=20, sticky='nesw')
     button_2.grid(row=4, column=1, padx=30, pady=20, sticky='nesw')
