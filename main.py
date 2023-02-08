@@ -10,8 +10,8 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 import pyttsx3
-
-# import second_window
+import time
+import webbrowser
 
 load_dotenv()
 
@@ -36,7 +36,6 @@ for_war = [96, 99, 100, 101, 102, 103]
 
 def main_form():
     window = Tk()
-    # window["bg"] = "black"
     window.title("Python - user form.")
     text_1 = "Нажмите кнопку!"
     text_2 = "Игорь! Привет! Я Чэвэкашка! Олег попросил немного помочь тебе. Что будем делать?"
@@ -107,15 +106,78 @@ def main_form():
                         new_file.write(f"{result_string}\n")
                         num += 1
 
-    def photo_forma():
-        pass
+    def new_window():
+        root = Toplevel(window)
+        root.configure(borderwidth=2)
+        root.title("Военная экипировка и снаряга!")
+        w, h, x, y = 1360, 850, 500, 100
+        root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        url = "https://www.wildberries.ru/catalog/137790056/detail.aspx?size=234503434"
+        url_pic = "https://basket-10.wb.ru/vol1377/part137790/137790056/images/c516x688/1.jpg"
+
+        background_image = PhotoImage(file="pictures/com_2.png")
+        background_label = Label(root, image=background_image)
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        def push_button():
+            text_push_1 = 'Форма диалога.'
+            text_push_2 = "Вывести картинку покрупнее?"
+
+            text_push_3 = 'Форма диалога.'
+            text_push_4 = "Хотите посмотреть этот товар в 'Wildberries'?"
+
+            ask_form_1 = messagebox.askquestion(text_push_1, text_push_2)
+            if ask_form_1 == 'no':
+                ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
+                if ask_form_2 == 'no':
+                    text_exit_1 = 'Работа приложения'
+                    text_exit_2 = 'Тогда работа закончена!'
+                    messagebox.showinfo(text_exit_1, text_exit_2)
+                    window.destroy()
+                else:
+                    webbrowser.open(url)
+            else:
+                webbrowser.open(url_pic)
+                time.sleep(5)
+                ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
+                if ask_form_2 == 'no':
+                    text_exit_1 = 'Работа приложения'
+                    text_exit_2 = 'Тогда работа закончена!'
+                    messagebox.showinfo(text_exit_1, text_exit_2)
+                    window.destroy()
+                else:
+                    webbrowser.open(url)
+
+        def exit_new_form():
+            window.destroy()
+            text_exit_1 = 'Работа приложения'
+            text_exit_2 = 'Спасибо, работа закончена!'
+            messagebox.showinfo(text_exit_1, text_exit_2)
+
+        photo = PhotoImage(file="pictures/1.png")
+        photoimage = photo.subsample(8, 8)
+
+        y = 0
+        x = 0
+        for i in range(71):
+            Button(root, image=photoimage, command=push_button, width=80).grid(row=y, column=x, padx=2, pady=2)
+            x += 1
+            if x > 14:
+                x = 0
+                y += 1
+
+        Button(root, text="ВЫХОД", command=exit_new_form, bg="red", fg="white").grid(row=5, column=14, padx=2,
+                                                                                     pady=2)
+
+        root.mainloop()
 
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='blue', fg='white', command=read_data)
     button_2 = Button(text="Записать список в файл", activebackground='red',
                       highlightcolor='red', bg='blue', fg='white', command=write_data)
     button_3 = Button(text="Открыть форму с фото", activebackground='red',
-                      highlightcolor='red', bg='blue', fg='white', command=photo_forma)
+                      highlightcolor='red', bg='blue', fg='white', command=new_window)
     button_4 = Button(text="Закрыть форму", activebackground='red', highlightcolor='red', bg='blue', fg='white',
                       command=exit_form)
     button_1.grid(row=3, column=1, padx=30, pady=20, sticky='nesw')

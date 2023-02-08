@@ -60,14 +60,14 @@ photoimage = photo.subsample(8, 8)
 photo_quit = PhotoImage(file="pictures/quit.png")
 photoimage_quit = photo_quit.subsample(4, 4)
 
-r = 0
-c = 0
+y = 0
+x = 0
 for i in range(71):
-    Button(root, image=photoimage, command=push_button, width=30).grid(row=r, column=c, padx=2, pady=2)
-    c += 1
-    if c > 14:
-        c = 0
-        r += 1
+    Button(root, image=photoimage, command=push_button, width=30).grid(row=y, column=x, padx=2, pady=2)
+    x += 1
+    if x > 14:
+        x = 0
+        y += 1
 
 Button(root, image=photoimage_quit, command=exit_form, width=30).grid(row=5, column=14, padx=2, pady=2)
 
