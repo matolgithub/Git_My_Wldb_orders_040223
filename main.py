@@ -14,6 +14,7 @@ import pyttsx3
 import time
 import webbrowser
 from tkinter import filedialog as fd
+from tkinter import filedialog
 
 load_dotenv()
 
@@ -100,10 +101,24 @@ def main_form():
         return total_data_list
 
     def get_list():
-        list_goods = read_data_1()
-        text_get_1 = 'Работа приложения'
-        text_get_2 = list_goods
-        messagebox.showinfo(text_get_1, text_get_2)
+        root = Toplevel(window)
+        root.title("Работа с файлами")
+        w, h, x, y = 1360, 850, 500, 100
+        root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        root.grid_rowconfigure(index=0, weight=1)
+        root.grid_columnconfigure(index=0, weight=1)
+        root.grid_columnconfigure(index=1, weight=1)
+
+        text_open = Text(root, width=300, height=500, bg="black", fg="white", wrap=WORD)
+        text_open.grid(column=0, columnspan=1, row=0)
+
+        with open("result.txt", "r") as file:
+            text = file.read()
+            text_open.delete("1.0", END)
+            text_open.insert("1.0", text)
+
+        root.mainloop()
 
     def write_data(file_name="data_result.txt"):
         list_data = read_data_1()
@@ -121,6 +136,23 @@ def main_form():
         text_write_1 = 'Работа приложения'
         text_write_2 = f'Данные по снаряжению записаны в файл: {file_name}, который расположен в каталоге: {file_path}.'
         messagebox.showinfo(text_write_1, text_write_2)
+
+    def write_result_txt(file_name="result.txt"):
+        list_data = read_data_1()
+        num = 1
+        file_path = os.getcwd()
+
+        with open(file_name, "w", encoding="utf-8") as new_file:
+            for item in list_data:
+                for key, value in item.items():
+                    result_string = f"{num}:  {value[0]}      Цена - {value[1]}\n----------------------------------"
+                    if key not in not_for_war and key <= 70 or key in for_war:
+                        new_file.write(f"{result_string}\n")
+                        num += 1
+
+        text_write_txt_1 = 'Работа приложения'
+        text_write_txt_2 = f'Данные по снаряжению записаны в файл: {file_name}, который расположен в каталоге: {file_path}.'
+        messagebox.showinfo(text_write_txt_1, text_write_txt_2)
 
     def new_window():
         root = Toplevel(window)
@@ -148,9 +180,9 @@ def main_form():
                 ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
                 if ask_form_2 == 'no':
                     text_exit_1 = 'Работа приложения'
-                    text_exit_2 = 'Тогда работа закончена!'
+                    text_exit_2 = 'Тогда работа с этой формой закончена!'
                     messagebox.showinfo(text_exit_1, text_exit_2)
-                    window.destroy()
+                    root.destroy()
                 else:
                     webbrowser.open(url)
             else:
@@ -159,9 +191,9 @@ def main_form():
                 ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
                 if ask_form_2 == 'no':
                     text_exit_1 = 'Работа приложения'
-                    text_exit_2 = 'Тогда работа закончена!'
+                    text_exit_2 = 'Тогда работа с этой формой закончена!'
                     messagebox.showinfo(text_exit_1, text_exit_2)
-                    window.destroy()
+                    root.destroy()
                 else:
                     webbrowser.open(url)
 
@@ -191,7 +223,7 @@ def main_form():
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='blue', fg='white', command=get_list)
     button_2 = Button(text="Записать список в файл", activebackground='red',
-                      highlightcolor='red', bg='blue', fg='white', command=write_data)
+                      highlightcolor='red', bg='blue', fg='white', command=write_result_txt)
     button_3 = Button(text="Открыть форму с фото", activebackground='red',
                       highlightcolor='red', bg='blue', fg='white', command=new_window)
     button_4 = Button(text="ВЫХОД", activebackground='red', highlightcolor='red', bg='blue', fg='white',
