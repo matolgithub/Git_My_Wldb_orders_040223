@@ -17,6 +17,8 @@ from tkinter import filedialog as fd
 from tkinter import filedialog
 from urllib.request import urlopen
 from PIL import ImageTk, Image
+import urllib
+from io import BytesIO
 
 load_dotenv()
 
@@ -57,7 +59,7 @@ def main_form():
     canvas.create_image(0, 0, anchor=NW, image=img)
 
     def exit_form():
-        window.quit()
+        window.destroy()
         text_exit_1 = 'Работа приложения'
         text_exit_2 = 'Благодарим, работа закончена!'
         messagebox.showinfo(text_exit_1, text_exit_2)
@@ -160,21 +162,23 @@ def main_form():
         list_data = read_data_1()
         list_wild = []
         list_pic = []
+        list_names = []
         for item in list_data:
             for key, value in item.items():
                 if key not in not_for_war and key <= 70 or key in for_war:
                     list_wild.append(value[4])
                     list_pic.append(value[3])
-        # print(list_wild)
-        # print("------------------------------")
-        # print(list_pic)
-        # print("------------------------------")
-        # print(len(list_pic), len(list_wild))
+                    list_names.append(value[0])
+                    # print(list_wild)
+                    # print("------------------------------")
+                    # print(list_pic)
+                    # print("------------------------------")
+                    # print(len(list_pic), len(list_wild))
 
-        return list_pic, list_wild
+        return list_pic, list_wild, list_names
 
     def new_window():
-        list_pic, list_wild = get_links()
+        list_pic, list_wild, list_names = get_links()
         root = Toplevel(window)
         root.configure(borderwidth=2)
         root.title("Военная экипировка и снаряга!")
@@ -188,60 +192,60 @@ def main_form():
         background_label = Label(root, image=background_image)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        def push_button():
-            for item in range(71):
-                text_push_1 = 'Форма диалога.'
-                text_push_2 = "Вывести картинку покрупнее?"
+        def push_button(item):
+            text_push_1 = 'Форма диалога.'
+            text_push_2 = "Вывести картинку покрупнее?"
 
-                text_push_3 = 'Форма диалога.'
-                text_push_4 = "Хотите посмотреть этот товар в 'Wildberries'?"
+            text_push_3 = 'Форма диалога.'
+            text_push_4 = "Хотите посмотреть этот товар в 'Wildberries'?"
 
-                ask_form_1 = messagebox.askquestion(text_push_1, text_push_2)
-                if ask_form_1 == 'no':
-                    ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
-                    if ask_form_2 == 'no':
-                        text_exit_1 = 'Работа приложения'
-                        text_exit_2 = 'Тогда работа с этой формой закончена!'
-                        messagebox.showinfo(text_exit_1, text_exit_2)
-                        root.destroy()
-                    else:
-                        webbrowser.open(list_wild[item])
+            ask_form_1 = messagebox.askquestion(text_push_1, text_push_2)
+            if ask_form_1 == 'no':
+                ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
+                if ask_form_2 == 'no':
+                    text_exit_1 = 'Работа приложения'
+                    text_exit_2 = 'Тогда работа с этой формой закончена!'
+                    messagebox.showinfo(text_exit_1, text_exit_2)
+                    root.destroy()
                 else:
-                    webbrowser.open(list_pic[item])
-                    time.sleep(5)
-                    ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
-                    if ask_form_2 == 'no':
-                        text_exit_1 = 'Работа приложения'
-                        text_exit_2 = 'Тогда работа с этой формой закончена!'
-                        messagebox.showinfo(text_exit_1, text_exit_2)
-                        root.destroy()
-                    else:
-                        webbrowser.open(list_wild[item])
+                    webbrowser.open(list_wild[item])
+            else:
+                webbrowser.open(list_pic[item])
+                time.sleep(5)
+                ask_form_2 = messagebox.askquestion(text_push_3, text_push_4)
+                if ask_form_2 == 'no':
+                    text_exit_1 = 'Работа приложения'
+                    text_exit_2 = 'Тогда работа с этой формой закончена!'
+                    messagebox.showinfo(text_exit_1, text_exit_2)
+                    root.destroy()
+                else:
+                    webbrowser.open(list_wild[item])
 
         def exit_new_form():
-            window.destroy()
+            root.destroy()
             text_exit_1 = 'Работа приложения'
-            text_exit_2 = 'Спасибо, работа закончена!'
+            text_exit_2 = 'Форма с кнопками, фото и ссылками закрыта!'
             messagebox.showinfo(text_exit_1, text_exit_2)
 
-        # photo = PhotoImage(file="pictures/1.png")
-        # photoimage = photo.subsample(8, 8)
+        def set_button(i):
+            # print(i, list_pic[i])
+
+            with urlopen(list_pic[i]) as u:
+                raw_data = u.read()
+            img = Image.open(BytesIO(raw_data))
+            photo = ImageTk.PhotoImage(img.resize((7, 9), Image.LANCZOS))
+            num = i
+            Button(root, text=list_names[i], command=lambda item=num: push_button(item=item), width=7, height=9).grid(
+                row=y, column=x, padx=2, pady=2)
 
         y = 0
         x = 0
-        z = 0
-        for i in range(5):
-            print(i, list_pic[i])
-            photo = urlopen(list_pic[i])
-            photoimage = ImageTk.PhotoImage(data=photo.read())
-            Button(root, image=photoimage, command=push_button, width=80, height=100).grid(row=y, column=x, padx=2,
-                                                                                           pady=2)
+        for i in range(70):
+            set_button(i)
             x += 1
-            z += 1
             if x > 14:
                 x = 0
                 y += 1
-                z += 1
 
         Button(root, text="ВЫХОД", command=exit_new_form, bg="red", fg="white").grid(row=5, column=14, padx=2,
                                                                                      pady=2)
