@@ -321,19 +321,19 @@ def main_form():
             text_exit_2 = 'Форма с кнопками, фото и ссылками закрыта!'
             messagebox.showinfo(text_exit_1, text_exit_2)
 
-        num = 0
-        buttons = []
-        for image in list_pic:
-            buttons.append(
-                Button(root, image=ImageTk.PhotoImage(image), command=lambda item=num: push_button(item=item), width=7,
-                       height=8))
-            num += 1
+        def set_button(i):
+            with urlopen(list_pic[i]) as u:
+                raw_data = u.read()
+            img = Image.open(BytesIO(raw_data))
+            photo = ImageTk.PhotoImage(img.resize((7, 9), Image.LANCZOS))
+            num = i
+            Button(root, command=lambda item=num: push_button(item=item), width=7, height=8,
+                   wraplength=70).grid(row=y, column=x, padx=2, pady=2)
 
         y = 0
         x = 0
-        # Add buttons to the window
-        for button in buttons:
-            button.grid(ow=y, column=x, padx=2, pady=2)
+        for i in range(70):
+            set_button(i)
             x += 1
             if x > 14:
                 x = 0
