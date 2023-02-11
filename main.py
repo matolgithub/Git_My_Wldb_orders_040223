@@ -264,7 +264,7 @@ def main_form():
         root = Toplevel(window)
         root.configure(borderwidth=2)
         root.title("Военная экипировка и снаряга!")
-        w, h, x, y = 1360, 850, 500, 100
+        w, h, x, y = 1360, 700, 500, 100
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
         background_image = PhotoImage(file="pictures/com_2.png")
@@ -273,7 +273,7 @@ def main_form():
 
         def push_button(item):
             text_push_1 = 'Форма диалога.'
-            text_push_2 = "Вывести картинку этого товара?"
+            text_push_2 = "Вывести крупную картинку этого товара?"
 
             text_push_3 = 'Форма диалога.'
             text_push_4 = "Хотите посмотреть этот товар в 'Wildberries'?"
@@ -321,19 +321,21 @@ def main_form():
             text_exit_2 = 'Форма с кнопками, фото и ссылками закрыта!'
             messagebox.showinfo(text_exit_1, text_exit_2)
 
-        def set_button(i):
-            with urlopen(list_pic[i]) as u:
+        list_photos = []
+        for i in list_pic:
+            with urlopen(i) as u:
                 raw_data = u.read()
             img = Image.open(BytesIO(raw_data))
-            photo = ImageTk.PhotoImage(img.resize((7, 9), Image.LANCZOS))
-            num = i
-            Button(root, command=lambda item=num: push_button(item=item), width=7, height=8,
-                   wraplength=70).grid(row=y, column=x, padx=2, pady=2)
-
+            list_photos.append(ImageTk.PhotoImage(img.resize((80, 100), Image.LANCZOS)))
         y = 0
         x = 0
-        for i in range(70):
-            set_button(i)
+        num = 0
+        for photo in list_photos:
+            Button(root, image=photo, command=lambda item=num: push_button(item=item), width=80, height=100).grid(row=y,
+                                                                                                                  column=x,
+                                                                                                                  padx=2,
+                                                                                                                  pady=10)
+            num += 1
             x += 1
             if x > 14:
                 x = 0
