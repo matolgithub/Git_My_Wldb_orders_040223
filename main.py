@@ -3,21 +3,13 @@ from os import getenv
 from requests import get
 from bs4 import BeautifulSoup as bs
 from fake_headers import Headers
-from pprint import pprint
 from dotenv import load_dotenv
-import lxml
 from tkinter import *
-# from tkinter.ttk import *
 from tkinter import messagebox
-from tkinter import simpledialog
-import pyttsx3
 import time
 import webbrowser
-from tkinter import filedialog as fd
-from tkinter import filedialog
 from urllib.request import urlopen
 from PIL import ImageTk, Image
-import urllib
 from io import BytesIO
 
 load_dotenv()
@@ -43,9 +35,9 @@ for_war = [96, 99, 100, 101, 102, 103]
 
 def main_form():
     window = Tk()
-    window.title("Python - user form.")
+    window.title("Подбор экипировки для братана")
     text_1 = "Нажмите кнопку!"
-    text_2 = "Игорь! Привет! Я Чэвэкашка! Олег попросил немного помочь тебе. Что будем делать?"
+    # text_2 = "Игорь! Привет! Я Чэвэкашка! Олег попросил немного помочь тебе. Что будем делать?"
     text_instruction_1 = Label(text=text_1, fg='white', bg='black')
     text_instruction_1.grid(row=7, column=1, padx=5, pady=10, sticky="w")
 
@@ -53,9 +45,9 @@ def main_form():
     background_label = Label(window, image=background_image)
     background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-    canvas = Canvas(width=430, height=520)
+    canvas = Canvas(width=430, height=380)
     canvas.grid(row=1, column=1, padx=15, pady=15, sticky="nesw")
-    img = PhotoImage(file='pictures/2 (1).png')
+    img = PhotoImage(file='pictures/111.png').subsample(2, 2)
     canvas.create_image(0, 0, anchor=NW, image=img)
 
     def exit_form():
@@ -180,6 +172,10 @@ def main_form():
         w, h, x, y = 1360, 850, 500, 100
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
+        text_wait_1 = 'Работа приложения'
+        text_wait_2 = 'Закройте это сообщение и подождите. Готовится форма.'
+        messagebox.showinfo(text_wait_1, text_wait_2, parent=root)
+
         background_image = PhotoImage(file="pictures/com_2.png")
         background_label = Label(root, image=background_image)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -266,6 +262,10 @@ def main_form():
         root.title("Военная экипировка и снаряга!")
         w, h, x, y = 1360, 700, 500, 100
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        text_wait_1 = 'Работа приложения'
+        text_wait_2 = 'Закройте это сообщение и подождите. Готовится форма.'
+        messagebox.showinfo(text_wait_1, text_wait_2, parent=root)
 
         background_image = PhotoImage(file="pictures/com_2.png")
         background_label = Label(root, image=background_image)
