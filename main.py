@@ -14,7 +14,8 @@ from io import BytesIO
 
 load_dotenv()
 
-url = getenv("URL")
+# url = getenv("URL")
+url = getenv("URL_2")
 headers = Headers().generate()
 
 id_catalog = ""
@@ -95,6 +96,32 @@ def main_form():
         # pprint(total_data_list)
 
         return total_data_list
+
+    def read_data_2(data_file="data_2.txt"):
+        link_list = []
+        image_list = []
+        unit_number = 1
+        with open(data_file, "r") as file:
+            content = file.read()
+            soup = bs(content, "lxml")
+            data_link_list_2 = soup.findAll("a", "goods-card__container j-product-popup")
+            data_pic_list_2 = soup.findAll("img")
+
+        for good_number in range(len(data_link_list_2)):
+            link = "https://www.wildberries.ru/" + str(data_link_list_2[good_number]).replace(" ", "").replace('"', "")[
+                                                   50:94].replace(">", "").replace("<", "")
+            link_list.append(link)
+            unit_number += 1
+        unit_number = 1
+        for good_number in data_pic_list_2:
+            image = "https:" + str(good_number).split('src="')[1][:70].split('"')[0]
+            image_list.append(image)
+            unit_number += 1
+        # pprint(link_list)
+        # pprint(image_list)
+        # pprint(data_pic_list_2)
+
+        return link_list, image_list
 
     def get_list():
         root = Toplevel(window)
@@ -346,6 +373,76 @@ def main_form():
 
         root.mainloop()
 
+    def new_window_3():
+        list_pic, basket_list = read_data_2()
+        root = Toplevel(window)
+        root.configure(borderwidth=2)
+        root.title("Военная экипировка и снаряга!")
+        w, h, x, y = 1360, 700, 500, 100
+        root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        text_wait_1 = 'Работа приложения'
+        text_wait_2 = 'Закройте это сообщение и подождите. Готовится форма.'
+        messagebox.showinfo(text_wait_1, text_wait_2, parent=root)
+
+        background_image = PhotoImage(file="pictures/com_2.png")
+        background_label = Label(root, image=background_image)
+        background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        def push_button(item):
+            text_push_3 = 'Форма диалога.'
+            text_push_4 = "Хотите посмотреть этот товар в 'Wildberries'?"
+
+            text_push_5 = 'Форма диалога.'
+            text_push_6 = "Форму закрыть и перейти в главное меню?"
+
+            ask_form_2 = messagebox.askquestion(text_push_3, text_push_4, parent=root)
+            if ask_form_2 == 'no':
+                ask_form_3 = messagebox.askquestion(text_push_5, text_push_6, parent=root)
+                if ask_form_3 == "no":
+                    text_contin_1 = 'Работа приложения'
+                    text_contin_2 = 'Тогда продолжаем.'
+                    messagebox.showinfo(text_contin_1, text_contin_2, parent=root)
+                else:
+                    text_exit_1 = 'Работа приложения'
+                    text_exit_2 = 'Тогда работа с этой формой закончена!'
+                    messagebox.showinfo(text_exit_1, text_exit_2, parent=root)
+                    root.destroy()
+            else:
+                webbrowser.open(list_pic[item])
+
+        def exit_new_form():
+            root.destroy()
+            text_exit_1 = 'Работа приложения'
+            text_exit_2 = 'Форма с кнопками, фото и ссылками закрыта!'
+            messagebox.showinfo(text_exit_1, text_exit_2)
+
+        list_photos = []
+        for i in basket_list:
+            with urlopen(i) as u:
+                raw_data = u.read()
+            img = Image.open(BytesIO(raw_data))
+            list_photos.append(ImageTk.PhotoImage(img.resize((80, 100), Image.LANCZOS)))
+        y = 0
+        x = 0
+        num = 0
+        for photo in list_photos:
+            Button(root, image=photo, command=lambda item=num: push_button(item=item), width=80, height=100).grid(
+                row=y,
+                column=x,
+                padx=2,
+                pady=10)
+            num += 1
+            x += 1
+            if x > 14:
+                x = 0
+                y += 1
+
+        Button(root, text="ВЫХОД", command=exit_new_form, bg="red", fg="white").grid(row=5, column=14, padx=2,
+                                                                                     pady=2)
+
+        root.mainloop()
+
     button_1 = Button(text="Получить список военного снаряжения", activebackground='red', highlightcolor='red',
                       bg='black', fg='white', command=get_list)
     button_2 = Button(text="Записать список в файл", activebackground='red',
@@ -355,7 +452,7 @@ def main_form():
     button_4 = Button(text="Открыть форму с фото", activebackground='red',
                       highlightcolor='red', bg='black', fg='white', command=new_window_2)
     button_5 = Button(text="Интересные элементы экипировки", activebackground='red',
-                      highlightcolor='red', bg='black', fg='white', command=exit)
+                      highlightcolor='red', bg='black', fg='white', command=new_window_3)
     button_6 = Button(text="ВЫХОД", activebackground='red', highlightcolor='red', bg='black', fg='white',
                       command=exit_form)
     button_1.grid(row=3, column=1, padx=30, pady=20, sticky='nesw')
