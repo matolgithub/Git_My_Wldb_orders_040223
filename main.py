@@ -377,8 +377,8 @@ def main_form():
         list_pic, basket_list = read_data_2()
         root = Toplevel(window)
         root.configure(borderwidth=2)
-        root.title("Военная экипировка и снаряга!")
-        w, h, x, y = 1360, 700, 500, 100
+        root.title("Дополнительная экипировка и снаряга!")
+        w, h, x, y = 560, 800, 650, 100
         root.geometry('%dx%d+%d+%d' % (w, h, x, y))
 
         text_wait_1 = 'Работа приложения'
@@ -422,23 +422,23 @@ def main_form():
             with urlopen(i) as u:
                 raw_data = u.read()
             img = Image.open(BytesIO(raw_data))
-            list_photos.append(ImageTk.PhotoImage(img.resize((80, 100), Image.LANCZOS)))
+            list_photos.append(ImageTk.PhotoImage(img.resize((100, 120), Image.LANCZOS)))
         y = 0
         x = 0
         num = 0
         for photo in list_photos:
-            Button(root, image=photo, command=lambda item=num: push_button(item=item), width=80, height=100).grid(
+            Button(root, image=photo, command=lambda item=num: push_button(item=item), width=100, height=120).grid(
                 row=y,
                 column=x,
                 padx=2,
                 pady=10)
             num += 1
             x += 1
-            if x > 14:
+            if x > 4:
                 x = 0
                 y += 1
 
-        Button(root, text="ВЫХОД", command=exit_new_form, bg="red", fg="white").grid(row=5, column=14, padx=2,
+        Button(root, text="ВЫХОД", command=exit_new_form, bg="red", fg="white").grid(row=5, column=4, padx=2,
                                                                                      pady=2)
 
         root.mainloop()
