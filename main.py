@@ -354,13 +354,16 @@ def main_form():
                       highlightcolor='red', bg='black', fg='white', command=new_window)
     button_4 = Button(text="Открыть форму с фото", activebackground='red',
                       highlightcolor='red', bg='black', fg='white', command=new_window_2)
-    button_5 = Button(text="ВЫХОД", activebackground='red', highlightcolor='red', bg='black', fg='white',
+    button_5 = Button(text="Интересные элементы экипировки", activebackground='red',
+                      highlightcolor='red', bg='black', fg='white', command=exit)
+    button_6 = Button(text="ВЫХОД", activebackground='red', highlightcolor='red', bg='black', fg='white',
                       command=exit_form)
     button_1.grid(row=3, column=1, padx=30, pady=20, sticky='nesw')
     button_2.grid(row=4, column=1, padx=30, pady=20, sticky='nesw')
     button_3.grid(row=5, column=1, padx=30, pady=20, sticky='nesw')
     button_4.grid(row=6, column=1, padx=30, pady=20, sticky='nesw')
     button_5.grid(row=7, column=1, padx=30, pady=20, sticky='nesw')
+    button_6.grid(row=8, column=1, padx=30, pady=20, sticky='nesw')
 
     # speaker_text(text_2 + text_1)
 
